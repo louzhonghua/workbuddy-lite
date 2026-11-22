@@ -56,6 +56,23 @@ class SessionManagerTest {
     }
 
     @Test
+    void resolvesEquivalentIdsAndKeepsDistinctSessionsSeparate() {
+        manager.createSession("FB");
+        manager.createSession("Ea");
+        manager.addMessage(new String("FB"), request);
+        manager.addMessage(new String("Ea"), reply);
+
+        assertEquals(List.of(request), manager.history(new String("FB")));
+        assertEquals(List.of(reply), manager.history(new String("Ea")));
+    }
+
+    @Test
+    void stillReportsAnUnknownSessionForInvalidLookupIds() {
+        assertThrows(NoSuchElementException.class, () -> manager.history(null));
+        assertThrows(NoSuchElementException.class, () -> manager.history(" "));
+    }
+
+    @Test
     void returnsTheMostRecentMessagesInTheirOriginalOrder() {
         manager.createSession("report");
         manager.addMessage("report", request);

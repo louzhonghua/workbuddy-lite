@@ -28,6 +28,9 @@ java -cp backend/target/classes io.github.louzhonghua.workbuddylite.demo.AgentTa
 
 # 第 2 课，会话隔离和历史快照
 java -cp backend/target/classes io.github.louzhonghua.workbuddylite.demo.SessionManagerDemo
+
+# 第 3 课，会话 ID 的值相等与哈希碰撞
+java -cp backend/target/classes io.github.louzhonghua.workbuddylite.demo.SessionKeyDemo
 ```
 
 ## 项目结构
@@ -47,5 +50,6 @@ workbuddy-lite/
 | --- | --- | --- |
 | 01 Java 任务执行 | `HelloWorkBuddy`、`AgentTaskDemo` | 从 `main` 方法入手，对比批量提交和逐个等待。 |
 | 02 会话管理 | `SessionManagerDemo` | 创建会话、追加消息、查询历史，观察两次读取之间的快照变化。 |
+| 03 会话键 | `SessionKeyDemo` | 对比引用相同与值相等，观察 `HashMap` 如何区分哈希碰撞的键。 |
 
 后续课程继续在这里扩展后端能力，桌面客户端作为同一仓库里的应用加入。

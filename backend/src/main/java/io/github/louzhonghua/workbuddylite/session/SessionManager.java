@@ -9,13 +9,11 @@ import java.util.Objects;
 
 /** In-memory session manager for single-threaded use. */
 public final class SessionManager {
-    private final Map<String, Session> sessions = new HashMap<>();
+    private final Map<SessionId, Session> sessions = new HashMap<>();
 
     public void createSession(String sessionId) {
-        if (sessionId == null || sessionId.isBlank()) {
-            throw new IllegalArgumentException("session ID must not be blank");
-        }
-        if (sessions.putIfAbsent(sessionId, new Session()) != null) {
+        SessionId key = new SessionId(sessionId);
+        if (sessions.putIfAbsent(key, new Session()) != null) {
             throw new IllegalArgumentException("session already exists: " + sessionId);
         }
     }
@@ -33,7 +31,7 @@ public final class SessionManager {
     }
 
     private Session requireSession(String sessionId) {
-        Session session = sessions.get(sessionId);
+        Session session = SessionId.isValid(sessionId) ? sessions.get(new SessionId(sessionId)) : null;
         if (session == null) {
             throw new NoSuchElementException("unknown session: " + sessionId);
         }
