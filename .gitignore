@@ -1,0 +1,8 @@
+target/
+*.class
+.vscode/settings.json
+.idea/
+*.iml
+.env
+.env.*
+!.env.example
