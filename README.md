@@ -34,6 +34,9 @@ java -cp backend/target/classes io.github.louzhonghua.workbuddylite.demo.Session
 
 # 第 5 课，用装饰器统计 history() 调用次数
 java -cp backend/target/classes io.github.louzhonghua.workbuddylite.demo.CountingRepositoryDemo
+
+# 第 6 课，用 Stream 把会话历史转换成模型输入
+java -cp backend/target/classes io.github.louzhonghua.workbuddylite.demo.ContextPreviewDemo
 ```
 
 ## 项目结构
@@ -45,8 +48,9 @@ workbuddy-lite/
     ├── pom.xml
     └── src/
         ├── main/java/…/demo/         # 课程运行入口
+        ├── main/java/…/agent/        # Agent 上下文与模型输入
         ├── main/java/…/session/      # 会话管理与消息模型
-        └── test/java/…/session/      # JUnit 5 测试
+        └── test/java/…/              # JUnit 5 测试，按功能组织
 ```
 
 | 课程 | 入口 | 练习内容 |
@@ -56,5 +60,6 @@ workbuddy-lite/
 | 03 会话键 | `SessionKeyDemo` | 对比引用相同与值相等，观察 `HashMap` 如何区分哈希碰撞的键。 |
 | 04 接口与构造器注入 | `SessionManagerDemo` | 通过 `SessionRepository` 把会话操作与存储实现分开，验证两个管理器如何共享状态。 |
 | 05 装饰器 | `CountingRepositoryDemo` | 用 `CountingSessionRepository` 包装存储实现并统计 `history()` 调用次数，只改 `main` 的装配代码。 |
+| 06 泛型、Lambda 与 Stream | `ContextPreviewDemo` | 读取最近的会话消息，按原顺序转换成模型输入。 |
 
 后续课程继续在这里扩展后端能力，桌面客户端作为同一仓库里的应用加入。
