@@ -3,7 +3,7 @@ package io.github.louzhonghua.workbuddylite.session;
 import java.util.List;
 import java.util.Objects;
 
-/** Decorates another repository and counts how often its history is read. */
+/** 包装另一个仓库，并统计 history() 的读取次数。 */
 public final class CountingSessionRepository implements SessionRepository {
     private final SessionRepository delegate;
     private int historyCalls;

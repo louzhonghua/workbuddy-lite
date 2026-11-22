@@ -3,27 +3,27 @@ package io.github.louzhonghua.workbuddylite.session;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-/** Stores sessions and returns message snapshots in insertion order. */
+/** 按插入顺序存储会话，并返回消息快照。 */
 public interface SessionRepository {
-    /** Creates an empty session and returns false if the ID already exists. */
+    /** 创建一个空会话；ID 已存在时返回 false。 */
     boolean create(SessionId id);
 
     /**
-     * Appends a message to an existing session.
-     * @throws NoSuchElementException if the session does not exist
+     * 向已存在的会话追加一条消息。
+     * @throws NoSuchElementException 会话不存在时抛出
      */
     void append(SessionId id, Message message);
 
     /**
-     * Returns an unmodifiable snapshot for an existing session.
-     * @throws NoSuchElementException if the session does not exist
+     * 返回指定会话的不可变消息快照。
+     * @throws NoSuchElementException 会话不存在时抛出
      */
     List<Message> history(SessionId id);
 
     /**
-     * Returns an unmodifiable snapshot of the last {@code limit} messages, oldest first.
-     * @throws NoSuchElementException if the session does not exist
-     * @throws IllegalArgumentException if an existing session is queried with a negative limit
+     * 返回最近 {@code limit} 条消息的不可变快照，最旧的在前。
+     * @throws NoSuchElementException 会话不存在时抛出
+     * @throws IllegalArgumentException 对已存在的会话传入负数 {@code limit} 时抛出
      */
     List<Message> recentHistory(SessionId id, int limit);
 }

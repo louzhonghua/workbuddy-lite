@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-/** In-memory storage for single-threaded use. */
+/** 供单线程使用的内存存储实现。 */
 public final class InMemorySessionRepository implements SessionRepository {
     private final Map<SessionId, List<Message>> sessions = new HashMap<>();
 
