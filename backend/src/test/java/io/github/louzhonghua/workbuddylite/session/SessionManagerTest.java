@@ -16,6 +16,25 @@ class SessionManagerTest {
     private final Message laterMessage = new Message(Role.ASSISTANT, "Sent");
 
     @Test
+    void managersWithTheSameRepositoryShareSessionData() {
+        SessionRepository repository = new InMemorySessionRepository();
+        var writer = new SessionManager(repository);
+        var reader = new SessionManager(repository);
+
+        writer.createSession("report");
+        writer.addMessage("report", request);
+
+        assertEquals(List.of(request), reader.history("report"));
+    }
+
+    @Test
+    void defaultManagersHaveIndependentStorage() {
+        manager.createSession("report");
+
+        assertThrows(NoSuchElementException.class, () -> new SessionManager().history("report"));
+    }
+
+    @Test
     void appendsMessagesInOrderToTheRequestedSession() {
         manager.createSession("report");
         manager.createSession("other");
