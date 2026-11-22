@@ -28,6 +28,10 @@ public final class SessionManager {
         return requireSession(sessionId).history();
     }
 
+    public List<Message> recentHistory(String sessionId, int limit) {
+        return requireSession(sessionId).recentHistory(limit);
+    }
+
     private Session requireSession(String sessionId) {
         Session session = sessions.get(sessionId);
         if (session == null) {
@@ -45,6 +49,13 @@ public final class SessionManager {
 
         List<Message> history() {
             return List.copyOf(messages);
+        }
+
+        List<Message> recentHistory(int limit) {
+            if (limit < 0) {
+                throw new IllegalArgumentException("limit must not be negative: " + limit);
+            }
+            return List.copyOf(messages.subList(Math.max(0, messages.size() - limit), messages.size()));
         }
     }
 }

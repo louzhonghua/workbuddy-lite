@@ -12,6 +12,8 @@ class SessionManagerTest {
     private final SessionManager manager = new SessionManager();
     private final Message request = new Message(Role.USER, "Draft a weekly report");
     private final Message reply = new Message(Role.ASSISTANT, "The draft is ready");
+    private final Message followUp = new Message(Role.USER, "Send it to the team");
+    private final Message laterMessage = new Message(Role.ASSISTANT, "Sent");
 
     @Test
     void appendsMessagesInOrderToTheRequestedSession() {
@@ -50,6 +52,57 @@ class SessionManagerTest {
     void reportsAnUnknownSessionForReadsAndWrites() {
         assertThrows(NoSuchElementException.class, () -> manager.history("missing"));
         assertThrows(NoSuchElementException.class, () -> manager.addMessage("missing", request));
+        assertThrows(NoSuchElementException.class, () -> manager.recentHistory("missing", 1));
+    }
+
+    @Test
+    void returnsTheMostRecentMessagesInTheirOriginalOrder() {
+        manager.createSession("report");
+        manager.addMessage("report", request);
+        manager.addMessage("report", reply);
+        manager.addMessage("report", followUp);
+
+        assertEquals(List.of(reply, followUp), manager.recentHistory("report", 2));
+    }
+
+    @Test
+    void returnsAllMessagesWhenLimitExceedsTheHistorySize() {
+        manager.createSession("report");
+        manager.addMessage("report", request);
+        manager.addMessage("report", reply);
+        manager.addMessage("report", followUp);
+
+        assertEquals(List.of(request, reply, followUp), manager.recentHistory("report", 10));
+    }
+
+    @Test
+    void returnsAnEmptyListForZeroLimit() {
+        manager.createSession("report");
+        manager.addMessage("report", request);
+
+        assertEquals(List.of(), manager.recentHistory("report", 0));
+    }
+
+    @Test
+    void rejectsNegativeLimit() {
+        manager.createSession("report");
+        manager.addMessage("report", request);
+
+        assertThrows(IllegalArgumentException.class, () -> manager.recentHistory("report", -1));
+    }
+
+    @Test
+    void recentHistorySnapshotKeepsItsContentAfterNewMessages() {
+        manager.createSession("report");
+        manager.addMessage("report", request);
+        manager.addMessage("report", reply);
+        manager.addMessage("report", followUp);
+        List<Message> recent = manager.recentHistory("report", 2);
+
+        manager.addMessage("report", laterMessage);
+
+        assertEquals(List.of(reply, followUp), recent);
+        assertEquals(List.of(followUp, laterMessage), manager.recentHistory("report", 2));
     }
 
     @Test
